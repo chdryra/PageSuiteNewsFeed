@@ -12,7 +12,7 @@ public class VideoPOJO {
     @SerializedName("thumbnail")
     private String mThumbnail;
     @SerializedName("id")
-    private int mInt;
+    private long mId;
     @SerializedName("title")
     private String mTitle;
 
@@ -20,8 +20,8 @@ public class VideoPOJO {
         return mThumbnail;
     }
 
-    public int getInt() {
-        return mInt;
+    public long getId() {
+        return mId;
     }
 
     public String getTitle() {

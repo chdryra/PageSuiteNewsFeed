@@ -22,7 +22,7 @@ import java.util.List;
 
 public class ArticlePOJO {
     @SerializedName("guid")
-    private int mGuid;
+    private long mGuid;
 
     @SerializedName("state")
     private int mState;
@@ -100,7 +100,7 @@ public class ArticlePOJO {
     @SerializedName("body")
     private String mBody;
 
-    public int getGuid() {
+    public long getGuid() {
         return mGuid;
     }
 
