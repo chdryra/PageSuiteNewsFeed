@@ -38,7 +38,7 @@ public class PojoToModelConverter {
             articles.add(convert(articlePojo));
         }
         FeedsPOJO feeds = pojo.getFeeds();
-        return new NewsFeed(newSection(feeds.getSection(), asUrl(feeds.getUrl())),
+        return new NewsFeed(newSection(feeds.getSectionName(), asUrl(feeds.getSectionUrl())),
                 articles, pojo.getSection(), asUrl(pojo.getUrl()));
     }
 

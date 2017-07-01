@@ -11,7 +11,7 @@ public class Article {
 
     private final ArticleSettings mSettings;
     private final ArticleUrl mUrl;
-    private final ArticleHeadline mArticleHeadline;
+    private final ArticleHeadline mHeadline;
     private final ArticleAuthors mAuthors;
     private final ArticleDate mDate;
     private final ArticleTopics mTopics;
@@ -19,12 +19,12 @@ public class Article {
     private final ArticleBody mBody;
 
     public Article(long guid, ArticleSettings settings, ArticleUrl url, ArticleHeadline
-            articleHeadline, ArticleAuthors authors, ArticleDate
-                           date, ArticleTopics topics, ArticleMedia media, ArticleBody body) {
+            headline, ArticleAuthors authors, ArticleDate date, ArticleTopics topics,
+                   ArticleMedia media, ArticleBody body) {
         mGuid = guid;
         mSettings = settings;
         mUrl = url;
-        mArticleHeadline = articleHeadline;
+        mHeadline = headline;
         mAuthors = authors;
         mDate = date;
         mTopics = topics;
@@ -44,8 +44,8 @@ public class Article {
         return mUrl;
     }
 
-    public ArticleHeadline getArticleHeadline() {
-        return mArticleHeadline;
+    public ArticleHeadline getHeadline() {
+        return mHeadline;
     }
 
     public ArticleAuthors getAuthors() {

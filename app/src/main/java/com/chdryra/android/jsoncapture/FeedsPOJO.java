@@ -15,11 +15,11 @@ public class FeedsPOJO {
     @SerializedName("url")
     private String mUrl;
 
-    public String getSection() {
+    public String getSectionName() {
         return mSection;
     }
 
-    public String getUrl() {
+    public String getSectionUrl() {
         return mUrl;
     }
 }

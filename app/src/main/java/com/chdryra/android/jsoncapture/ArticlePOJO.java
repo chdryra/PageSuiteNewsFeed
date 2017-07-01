@@ -58,6 +58,7 @@ public class ArticlePOJO {
     private String mShortHeadline;
 
     @SerializedName("sub_headline")
+    @Nullable
     private String mSubHeadline;
 
     @SerializedName("author")
@@ -145,6 +146,7 @@ public class ArticlePOJO {
         return mShortHeadline;
     }
 
+    @Nullable
     public String getSubHeadline() {
         return mSubHeadline;
     }
