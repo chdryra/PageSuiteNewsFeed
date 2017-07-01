@@ -9,9 +9,6 @@ import com.chdryra.android.model.JsonApi;
 
 import org.junit.Test;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -97,32 +94,4 @@ public class AsyncUnitTests {
         return new AsyncLatch(WAIT_TIME);
     }
 
-    private class AsyncLatch {
-        private CountDownLatch mLatch;
-        private long mAwaitTime;
-        private boolean mTriggered = false;
-
-        private AsyncLatch(long awaitTime) {
-            mLatch = new CountDownLatch(1);
-            mAwaitTime = awaitTime;
-        }
-
-        private void waitForTrigger() {
-            try {
-                mLatch.await(mAwaitTime, TimeUnit.MILLISECONDS);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                fail("Latch got interrupted: " + e.getMessage());
-            }
-        }
-
-        private void trigger() {
-            mTriggered = true;
-            mLatch.countDown();
-        }
-
-        private boolean wasTriggered() {
-            return mTriggered;
-        }
-    }
 }

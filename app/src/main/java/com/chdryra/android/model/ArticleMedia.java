@@ -7,7 +7,7 @@ public class ArticleMedia {
     private final Image mImageOverride;
     private final Video mVideo;
 
-    public ArticleMedia(Image image, Image imageOverride, @Nullable Video video) {
+    public ArticleMedia(Image image, @Nullable Image imageOverride, @Nullable Video video) {
         mImage = image;
         mImageOverride = imageOverride;
         mVideo = video;
@@ -17,6 +17,7 @@ public class ArticleMedia {
         return mImage;
     }
 
+    @Nullable
     public Image getImageOverride() {
         return mImageOverride;
     }

@@ -42,10 +42,6 @@ public class PojoToModelConverter {
                 articles, pojo.getSection(), asUrl(pojo.getUrl()));
     }
 
-    private Author newAuthor(String name, @Nullable String jobTitle, @Nullable String twitterHandle) {
-        return new Author(name, jobTitle, twitterHandle);
-    }
-
     private ArticleSection newSection(String sectionName, @Nullable URL sectionUrl) {
         return new ArticleSection(sectionName, sectionUrl);
     }
@@ -80,18 +76,18 @@ public class PojoToModelConverter {
 
     private ArticleDate newDate(ArticlePOJO pojo) {
         Date publishDate = asDate(pojo.getPublishDate());
-        Date updatedDate = asDatenullable(pojo.getUpdatedDate());
+        Date updatedDate = asDateNullable(pojo.getUpdatedDate());
         return new ArticleDate(publishDate, updatedDate == null ? publishDate : updatedDate);
     }
 
     @Nullable
     private Date asDate(String stringDate) {
-        Date date = asDatenullable(stringDate);
+        Date date = asDateNullable(stringDate);
         return date == null ? new Date() : date;
     }
 
     @Nullable
-    private Date asDatenullable(String stringDate) {
+    private Date asDateNullable(String stringDate) {
         SimpleDateFormat df = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
         Date date = null;
         try {
@@ -132,7 +128,9 @@ public class PojoToModelConverter {
         return new ArticleUrl(asUrl(pojo.getUrl()), asUrl(pojo.getLink()));
     }
 
-    private Image convert(ImagePOJO pojo) {
+    @Nullable
+    private Image convert(@Nullable ImagePOJO pojo) {
+        if(pojo == null) return null;
         return new Image(asUrl(pojo.getUrl()), asUrl(pojo.getThumbnail()),
                 asString(pojo.getCopyright()), asString(pojo.getCaption()), pojo.getTitle());
     }
