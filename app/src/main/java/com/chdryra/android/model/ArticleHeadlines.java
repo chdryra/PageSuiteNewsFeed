@@ -1,13 +1,13 @@
 package com.chdryra.android.model;
 
-public class ArticleHeadline {
+public class ArticleHeadlines {
     private final String mHeadline;
     private final String mHeadlineOverride;
     private final String mShortHeadline;
     private final String mSubHeadline;
     private final String mLocalCaption;
 
-    public ArticleHeadline(String headline, String headlineOverride, String shortHeadline, String
+    public ArticleHeadlines(String headline, String headlineOverride, String shortHeadline, String
             subHeadline, String localCaption) {
         mHeadline = headline;
         mHeadlineOverride = headlineOverride;

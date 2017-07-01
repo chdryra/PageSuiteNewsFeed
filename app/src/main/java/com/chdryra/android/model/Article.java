@@ -11,14 +11,14 @@ public class Article {
 
     private final ArticleSettings mSettings;
     private final ArticleUrl mUrl;
-    private final ArticleHeadline mHeadline;
+    private final ArticleHeadlines mHeadline;
     private final ArticleAuthors mAuthors;
     private final ArticleDate mDate;
     private final ArticleTopics mTopics;
     private final ArticleMedia mMedia;
     private final ArticleBody mBody;
 
-    public Article(long guid, ArticleSettings settings, ArticleUrl url, ArticleHeadline
+    public Article(long guid, ArticleSettings settings, ArticleUrl url, ArticleHeadlines
             headline, ArticleAuthors authors, ArticleDate date, ArticleTopics topics,
                    ArticleMedia media, ArticleBody body) {
         mGuid = guid;
@@ -44,7 +44,7 @@ public class Article {
         return mUrl;
     }
 
-    public ArticleHeadline getHeadline() {
+    public ArticleHeadlines getHeadlines() {
         return mHeadline;
     }
 

@@ -19,8 +19,8 @@ public class JsonApi {
         mServicePaths = new HashMap<>();
     }
 
-    public void addServicePath(String pathKey, String path) {
-        mServicePaths.put(pathKey, new ServicePath(pathKey, path));
+    public void addServicePath(String pathName, String path) {
+        mServicePaths.put(pathName, new ServicePath(pathName, path));
     }
 
     public String getBaseUrl() {
