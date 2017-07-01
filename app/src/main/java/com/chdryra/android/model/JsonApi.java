@@ -10,46 +10,48 @@ import java.util.Map;
  * Email: rizwan.choudrey@gmail.com
  */
 
-public class JsonApi<T extends JsonApi> {
-    private String mBaseUrl;
-    private Map<String, Channel<T>> mChannels;
+public class JsonApi {
+    private final String mBaseUrl;
+    private final Map<String, ServicePath> mServicePaths;
 
-    JsonApi(String baseUrl) {
+    public JsonApi(String baseUrl) {
         mBaseUrl = baseUrl;
-        mChannels = new HashMap<>();
+        mServicePaths = new HashMap<>();
     }
 
-    void addChannel(String channelName, String channelPath) {
-        mChannels.put(channelName, new Channel<T>(channelName, channelPath));
+    public void addServicePath(String pathKey, String path) {
+        mServicePaths.put(pathKey, new ServicePath(pathKey, path));
     }
 
     public String getBaseUrl() {
         return mBaseUrl;
     }
 
-    public Channel<T> getChannel(String name) {
-        return mChannels.containsKey(name) ? mChannels.get(name) : new Channel<T>("", "");
+    public ServicePath getServicePath(String pathKey) {
+        return mServicePaths.containsKey(pathKey) ? mServicePaths.get(pathKey) : ServicePath.NULL_PATH;
     }
 
-    public Collection<Channel<T>> getChannels() {
-        return mChannels.values();
+    public Collection<ServicePath> getServicePaths() {
+        return mServicePaths.values();
     }
 
-    public static class Channel<T extends JsonApi> {
-        private String mChannelName;
-        private String mChannelPath;
+    public static class ServicePath {
+        public static final ServicePath NULL_PATH = new ServicePath("", "");
 
-        private Channel(String channelName, String channelPath) {
-            mChannelName = channelName;
-            mChannelPath = channelPath;
+        private String mPathKey;
+        private String mPath;
+
+        private ServicePath(String pathKey, String path) {
+            mPathKey = pathKey;
+            mPath = path;
         }
 
-        public String getChannelName() {
-            return mChannelName;
+        public String getPathKey() {
+            return mPathKey;
         }
 
-        public String getChannelPath() {
-            return mChannelPath;
+        public String getPath() {
+            return mPath;
         }
     }
 }

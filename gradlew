@@ -102,13 +102,13 @@ fi
 
 # For Darwin, add options to specify how the application appears in the dock
 if $darwin; then
-    GRADLE_OPTS="$GRADLE_OPTS \"-Xdock:channelName=$APP_NAME\" \"-Xdock:icon=$APP_HOME/media/gradle.icns\""
+    GRADLE_OPTS="$GRADLE_OPTS \"-Xdock:pathKey=$APP_NAME\" \"-Xdock:icon=$APP_HOME/media/gradle.icns\""
 fi
 
 # For Cygwin, switch paths to Windows format before running java
 if $cygwin ; then
-    APP_HOME=`cygpath --channelPath --mixed "$APP_HOME"`
-    CLASSPATH=`cygpath --channelPath --mixed "$CLASSPATH"`
+    APP_HOME=`cygpath --feedCode --mixed "$APP_HOME"`
+    CLASSPATH=`cygpath --feedCode --mixed "$CLASSPATH"`
     JAVACMD=`cygpath --unix "$JAVACMD"`
 
     # We build the pattern for arguments to be converted via cygpath
@@ -130,7 +130,7 @@ if $cygwin ; then
         CHECK2=`echo "$arg"|egrep -c "^-"`                                 ### Determine if an option
 
         if [ $CHECK -ne 0 ] && [ $CHECK2 -eq 0 ] ; then                    ### Added a condition
-            eval `echo args$i`=`cygpath --channelPath --ignore --mixed "$arg"`
+            eval `echo args$i`=`cygpath --feedCode --ignore --mixed "$arg"`
         else
             eval `echo args$i`="\"$arg\""
         fi

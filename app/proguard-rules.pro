@@ -1,7 +1,7 @@
 # Add project specific ProGuard rules here.
 # By default, the flags in this file are appended to flags specified
 # in C:\Users\User 1\AppData\Local\Android\Sdk/tools/proguard/proguard-android.txt
-# You can edit the include channelPath and order by changing the proguardFiles
+# You can edit the include feedCode and order by changing the proguardFiles
 # directive in build.gradle.
 #
 # For more details, see
@@ -10,7 +10,7 @@
 # Add any project specific keep options here:
 
 # If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class channelName to the JavaScript interface
+# and specify the fully qualified class pathKey to the JavaScript interface
 # class:
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
@@ -21,5 +21,5 @@
 #-keepattributes SourceFile,LineNumberTable
 
 # If you keep the line number information, uncomment this to
-# hide the original source file channelName.
+# hide the original source file pathKey.
 #-renamesourcefileattribute SourceFile

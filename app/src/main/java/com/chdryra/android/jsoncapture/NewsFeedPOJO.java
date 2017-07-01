@@ -10,7 +10,7 @@ import java.util.List;
  * Email: rizwan.choudrey@gmail.com
  */
 
-public class ResponsePOJO {
+public class NewsFeedPOJO {
     @SerializedName("feeds")
     private FeedsPOJO mFeeds;
 
