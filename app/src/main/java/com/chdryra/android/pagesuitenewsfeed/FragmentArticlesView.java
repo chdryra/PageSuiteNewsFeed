@@ -34,7 +34,8 @@ import java.util.ArrayList;
  * On: 23/01/2015
  * Email: rizwan.choudrey@gmail.com
  */
-public class FragmentArticlesView extends Fragment implements IndependentFetcher.FetcherCallback{
+public class FragmentArticlesView extends Fragment
+        implements IndependentFetcher.FetcherCallback, RecyclerAdapter.OnItemClickListener<Article>{
     private static final int LAYOUT = R.layout.fragment_list_articles;
 
     private TextView mTitle;
@@ -74,7 +75,7 @@ public class FragmentArticlesView extends Fragment implements IndependentFetcher
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(manager);
 
-        mAdapter = new RecyclerAdapter<>(new FactoryArticleViewHolder(), new ArrayList<Article>());
+        mAdapter = new RecyclerAdapter<>(new FactoryArticleViewHolder(), new ArrayList<Article>(), this);
         mRecyclerView.setAdapter(mAdapter);
 
         DividerItemDecoration divider = new DividerItemDecoration(getActivity(),
@@ -88,14 +89,6 @@ public class FragmentArticlesView extends Fragment implements IndependentFetcher
         return v;
     }
 
-    private void fetchNewsFeed(IndependentApi.Subscriptions sub) {
-        JsonSubs<IndependentApi> subs = new JsonSubs<>(new IndependentApi());
-        subs.addSubscription(sub.getName(), sub.getPath());
-        IndependentFetcher fetcher = new FactoryFeedFetcher().newIndependentFetcher();
-        fetcher.fetch(subs.getSubscription(sub.getName()), this);
-    }
-
-
     @Override
     public void onCreateOptionsMenu(Menu menu, android.view.MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -104,6 +97,18 @@ public class FragmentArticlesView extends Fragment implements IndependentFetcher
     @Override
     public boolean onOptionsItemSelected(android.view.MenuItem item) {
         return super.onOptionsItemSelected(item);
+    }
+
+    private void fetchNewsFeed(IndependentApi.Subscriptions sub) {
+        JsonSubs<IndependentApi> subs = new JsonSubs<>(new IndependentApi());
+        subs.addSubscription(sub.getName(), sub.getPath());
+        IndependentFetcher fetcher = new FactoryFeedFetcher().newIndependentFetcher();
+        fetcher.fetch(subs.getSubscription(sub.getName()), this);
+    }
+
+    @Override
+    public void onItemClick(Article datum) {
+
     }
 }
 
