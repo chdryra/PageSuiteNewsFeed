@@ -16,6 +16,7 @@ import com.chdryra.android.model.Author;
 import com.chdryra.android.model.Image;
 import com.chdryra.android.model.NewsFeed;
 import com.chdryra.android.model.Video;
+import com.chdryra.android.utils.TextUtils;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -72,7 +73,7 @@ public class PojoToModelConverter {
     }
 
     private ArticleBody newBody(ArticlePOJO pojo) {
-        return new ArticleBody(pojo.getBody());
+        return new ArticleBody(TextUtils.removeScriptsAndClean(pojo.getBody()));
     }
 
     private ArticleMedia newMedia(ArticlePOJO pojo) {
@@ -161,10 +162,6 @@ public class PojoToModelConverter {
 
     private String asString(@Nullable String nullableString) {
         if(nullableString == null) return "";
-        return clean(nullableString);
-    }
-
-    private String clean(String pre) {
-        return pre.replace("&nbsp;", " ");
+        return TextUtils.clean(nullableString);
     }
 }
