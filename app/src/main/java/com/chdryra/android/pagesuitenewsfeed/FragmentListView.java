@@ -12,13 +12,17 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,12 +48,14 @@ public class FragmentListView extends Fragment
     private static final int LAYOUT = R.layout.fragment_list_view;
 
     private TextView mTitle;
-    private RecyclerView mRecyclerView;
     private RecyclerAdapter<Article> mAdapter;
+    private DrawerLayout mDrawerLayout;
+    private JsonSubs<IndependentApi> mSubscriptions;
 
     public static FragmentListView newInstance() {
         return new FragmentListView();
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,6 +63,8 @@ public class FragmentListView extends Fragment
 
         setHasOptionsMenu(true);
         setRetainInstance(true);
+
+        setSubscriptions();
     }
 
     @Override
@@ -76,39 +84,56 @@ public class FragmentListView extends Fragment
         View v = inflater.inflate(LAYOUT, container, false);
 
         mTitle = (TextView) v.findViewById(R.id.title);
-        mRecyclerView = (RecyclerView) v.findViewById(R.id.recycler_view_articles);
-        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(manager);
 
-        mAdapter = new RecyclerAdapter<>(new FactoryArticleViewHolder(), new ArrayList<Article>(), this);
-        mRecyclerView.setAdapter(mAdapter);
+        setDataView(v);
+        setNavigationDrawer(v);
 
-        DividerItemDecoration divider = new DividerItemDecoration(getActivity(),
-                manager.getOrientation());
-        mRecyclerView.addItemDecoration(divider);
-
-        IndependentApi.Subscriptions frontPage = IndependentApi.Subscriptions.FRONT_PAGE;
-        mTitle.setText(frontPage.getName());
-        fetchNewsFeed(frontPage);
+        fetchNewsFeed(mSubscriptions.getSubscription(IndependentApi.Subscriptions.FRONT_PAGE.getName()));
 
         return v;
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, android.view.MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
+    private void setDataView(View v) {
+        RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view_articles);
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(manager);
+
+        mAdapter = new RecyclerAdapter<>(new FactoryArticleViewHolder(), new ArrayList<Article>()
+                , this);
+        recyclerView.setAdapter(mAdapter);
+
+        DividerItemDecoration divider = new DividerItemDecoration(getActivity(),
+                manager.getOrientation());
+        recyclerView.addItemDecoration(divider);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(android.view.MenuItem item) {
-        return super.onOptionsItemSelected(item);
+    private void setNavigationDrawer(View v) {
+        mDrawerLayout = (DrawerLayout) v.findViewById(R.id.drawer_layout);
+        ListView drawerList = (ListView) v.findViewById(R.id.left_drawer);
+
+        drawerList.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout
+                .simple_list_item_1, mSubscriptions.getSubscriptionNames()));
+        drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String name = mSubscriptions.getSubscriptionNames().get(position);
+                fetchNewsFeed(mSubscriptions.getSubscription(name));
+                mDrawerLayout.closeDrawers();
+            }
+        });
     }
 
-    private void fetchNewsFeed(IndependentApi.Subscriptions sub) {
-        JsonSubs<IndependentApi> subs = new JsonSubs<>(new IndependentApi());
-        subs.addSubscription(sub.getName(), sub.getPath());
+    private void fetchNewsFeed(JsonSubs<IndependentApi>.Subscription sub) {
+        mTitle.setText(sub.getName());
         IndependentFetcher fetcher = new FactoryFeedFetcher().newIndependentFetcher();
-        fetcher.fetch(subs.getSubscription(sub.getName()), this);
+        fetcher.fetch(sub, this);
+    }
+
+    @NonNull
+    private void setSubscriptions() {
+        mSubscriptions = new JsonSubs<>(new IndependentApi());
+        for(IndependentApi.Subscriptions sub : IndependentApi.Subscriptions.values())
+            mSubscriptions.addSubscription(sub.getName(), sub.getPath());
     }
 
     @Override

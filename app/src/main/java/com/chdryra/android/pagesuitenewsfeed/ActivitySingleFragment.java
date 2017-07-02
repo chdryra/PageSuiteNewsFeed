@@ -13,12 +13,6 @@ import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-/**
- * Activities often only have one fragment for the UI (on phones anyway) so this abstract
- * class takes care of the fragment transaction when Activities are created and populated with a
- * single fragment. Just need to inherit from it and override the {@link #createFragment(Bundle)}
- * method. This is a common Android pattern.
- */
 public abstract class ActivitySingleFragment extends AppCompatActivity {
     public static final int FRAGMENT_ID = R.id.fragmentContainer;
     private Fragment mFragment;
@@ -28,6 +22,7 @@ public abstract class ActivitySingleFragment extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_fragment);
 
         FragmentManager fm = getFragmentManager();

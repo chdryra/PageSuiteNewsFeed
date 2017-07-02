@@ -1,5 +1,6 @@
 package com.chdryra.android.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +33,13 @@ public class JsonSubs<T extends JsonApi> {
 
     public Subscription getSubscription(String name) {
         return new Subscription(name);
+    }
+
+    public ArrayList<String> getSubscriptionNames() {
+        ArrayList<String> names = new ArrayList<>();
+        names.addAll(mSubs.keySet());
+
+        return names;
     }
 
     public class Subscription {

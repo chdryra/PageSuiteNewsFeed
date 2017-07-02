@@ -9,7 +9,7 @@ import android.os.Bundle;
  * Email: rizwan.choudrey@gmail.com
  */
 
-public class ActivityItemView extends ActivitySingleFragment {
+public class ActivityImageView extends ActivitySingleFragment {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,6 +21,6 @@ public class ActivityItemView extends ActivitySingleFragment {
 
     @Override
     protected Fragment createFragment(Bundle savedInstanceState) {
-        return FragmentItemView.newInstance();
+        return FragmentImageView.newInstance();
     }
 }

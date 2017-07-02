@@ -43,6 +43,7 @@ import java.text.SimpleDateFormat;
  * Email: rizwan.choudrey@gmail.com
  */
 public class FragmentItemView extends Fragment {
+    public static final String IMAGE = "com.chdryra.android.pagesuitenewsfeed.image";
     private static final int LAYOUT = R.layout.fragment_item_view;
     private static final int MENU = R.menu.menu_item_view;
 
@@ -91,8 +92,35 @@ public class FragmentItemView extends Fragment {
         return v;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, android.view.MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(MENU, menu);
+        URL url = mArticle.getUrl().getUrl();
+        if (url == null) menu.findItem(R.id.menu_browser).setVisible(false);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(android.view.MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_browser:
+                launchBrowser();
+                return true;
+            case R.id.menu_share:
+                launchShare();
+                return true;
+            case android.R.id.home:
+                getActivity().finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     private void displayArticle() {
-        getArticle();
+        Parcelable data = getActivity().getIntent().getParcelableExtra(FragmentListView.ARTICLE);
+        mArticle = Parcels.unwrap(data);
+
         setSection();
         setHeadlines();
         setAuthor();
@@ -104,7 +132,7 @@ public class FragmentItemView extends Fragment {
 
     private void setTags() {
         StringBuilder builder = new StringBuilder();
-        for(String tag : mArticle.getTopics().getTags()) {
+        for (String tag : mArticle.getTopics().getTags()) {
             builder.append("#");
             builder.append(tag);
             builder.append(" ");
@@ -127,7 +155,7 @@ public class FragmentItemView extends Fragment {
         Author author = authors.getPrimaryAuthor();
         mAuthor.setText(author.getName());
         String position = author.getJobTitle();
-        if(position.length() == 0) position = authors.getAuthorLocation();
+        if (position.length() == 0) position = authors.getAuthorLocation();
         mPosition.setText(position);
     }
 
@@ -148,33 +176,28 @@ public class FragmentItemView extends Fragment {
                 .fitCenter()
                 .crossFade()
                 .into(mImage);
+
         String caption = image.getCaption();
         String copyright = image.getCopyright();
-        if(copyright.length() > 1) {
+        if (copyright.length() > 1) {
             caption += " (Copyright: " + copyright + ")";
         }
+
         mCaption.setText(caption);
+
+        mImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchImageViewer();
+            }
+        });
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, android.view.MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(MENU, menu);
-        URL url = mArticle.getUrl().getUrl();
-        if(url == null) menu.findItem(R.id.menu_browser).setVisible(false);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(android.view.MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_browser:
-                launchBrowser();
-                return true;
-            case R.id.menu_share:
-                launchShare();
-                return true;default:
-                return super.onOptionsItemSelected(item);
-        }
+    private void launchImageViewer() {
+        Intent intent = new Intent(getActivity(), ActivityImageView.class);
+        Parcelable data = Parcels.wrap(mArticle.getMedia().getImage());
+        intent.putExtra(IMAGE, data);
+        startActivity(intent);
     }
 
     private void launchShare() {
@@ -182,7 +205,8 @@ public class FragmentItemView extends Fragment {
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT, formatForSharing());
         sendIntent.setType("text/plain");
-        startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.share_with)));
+        startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string
+                .share_with)));
     }
 
     private String formatForSharing() {
@@ -190,8 +214,8 @@ public class FragmentItemView extends Fragment {
         URL url = mArticle.getUrl().getUrl();
 
         String headline = headlines.getShortHeadline();
-        String text = headline +"\n\n";
-        if(url == null) {
+        String text = headline + "\n\n";
+        if (url == null) {
             text += headlines.getSubHeadline();
         } else {
             text += url.toString();
@@ -202,7 +226,7 @@ public class FragmentItemView extends Fragment {
 
     private void launchBrowser() {
         URL url = mArticle.getUrl().getUrl();
-        if(url != null) {
+        if (url != null) {
             Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(url.toString()));
             startActivity(i);
@@ -213,11 +237,6 @@ public class FragmentItemView extends Fragment {
 
     private void makeToast(String toast) {
         Toast.makeText(getActivity(), toast, Toast.LENGTH_SHORT).show();
-    }
-
-    private void getArticle() {
-        Parcelable data = getActivity().getIntent().getParcelableExtra(FragmentListView.ARTICLE);
-        mArticle = Parcels.unwrap(data);
     }
 }
 
