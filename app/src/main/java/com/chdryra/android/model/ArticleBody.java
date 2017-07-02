@@ -1,7 +1,13 @@
 package com.chdryra.android.model;
 
+import org.parceler.Parcel;
+
+@Parcel
 public class ArticleBody {
-    private final String mBody;
+    private String mBody;
+
+    public ArticleBody() {
+    }
 
     public ArticleBody(String body) {
         mBody = body;

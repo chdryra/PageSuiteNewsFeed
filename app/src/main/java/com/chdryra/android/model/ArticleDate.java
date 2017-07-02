@@ -1,10 +1,16 @@
 package com.chdryra.android.model;
 
+import org.parceler.Parcel;
+
 import java.util.Date;
 
+@Parcel
 public class ArticleDate {
-    private final Date mPublishDate;
-    private final Date mUpdatedDate;
+    private Date mPublishDate;
+    private Date mUpdatedDate;
+
+    public ArticleDate() {
+    }
 
     public ArticleDate(Date publishDate, Date updatedDate) {
         mPublishDate = publishDate;

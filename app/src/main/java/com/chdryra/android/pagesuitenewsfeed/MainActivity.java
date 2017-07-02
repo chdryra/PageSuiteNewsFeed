@@ -6,6 +6,6 @@ import android.os.Bundle;
 public class MainActivity extends ActivitySingleFragment {
     @Override
     protected Fragment createFragment(Bundle savedInstanceState) {
-        return FragmentArticlesView.newInstance();
+        return FragmentListView.newInstance();
     }
 }

@@ -1,11 +1,17 @@
 package com.chdryra.android.model;
 
+import org.parceler.Parcel;
+
 import java.util.List;
 
+@Parcel
 public class ArticleAuthors {
-    private final List<Author> mAuthors;
-    private final Author mPrimaryAuthor;
-    private final String mAuthorLocation;
+    private List<Author> mAuthors;
+    private Author mPrimaryAuthor;
+    private String mAuthorLocation;
+
+    public ArticleAuthors() {
+    }
 
     public ArticleAuthors(List<Author> authors, Author primaryAuthor, String authorLocation) {
         mAuthors = authors;

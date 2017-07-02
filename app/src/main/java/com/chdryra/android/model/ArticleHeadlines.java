@@ -1,11 +1,17 @@
 package com.chdryra.android.model;
 
+import org.parceler.Parcel;
+
+@Parcel
 public class ArticleHeadlines {
-    private final String mHeadline;
-    private final String mHeadlineOverride;
-    private final String mShortHeadline;
-    private final String mSubHeadline;
-    private final String mLocalCaption;
+    private String mHeadline;
+    private String mHeadlineOverride;
+    private String mShortHeadline;
+    private String mSubHeadline;
+    private String mLocalCaption;
+
+    public ArticleHeadlines() {
+    }
 
     public ArticleHeadlines(String headline, String headlineOverride, String shortHeadline, String
             subHeadline, String localCaption) {

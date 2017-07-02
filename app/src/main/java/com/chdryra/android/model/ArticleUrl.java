@@ -2,6 +2,8 @@ package com.chdryra.android.model;
 
 import android.support.annotation.Nullable;
 
+import org.parceler.Parcel;
+
 import java.net.URL;
 
 /**
@@ -11,9 +13,14 @@ import java.net.URL;
  *
  * Nullable Urls in case malformed from JSON.
  */
+
+@Parcel
 public class ArticleUrl {
-    private final URL mUrl;
-    private final URL mLink;
+    private URL mUrl;
+    private URL mLink;
+
+    public ArticleUrl() {
+    }
 
     public ArticleUrl(@Nullable URL url, @Nullable URL link) {
         mUrl = url;

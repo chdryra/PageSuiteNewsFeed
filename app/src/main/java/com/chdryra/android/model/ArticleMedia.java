@@ -2,10 +2,16 @@ package com.chdryra.android.model;
 
 import android.support.annotation.Nullable;
 
+import org.parceler.Parcel;
+
+@Parcel
 public class ArticleMedia {
-    private final Image mImage;
-    private final Image mImageOverride;
-    private final Video mVideo;
+    private Image mImage;
+    private Image mImageOverride;
+    private Video mVideo;
+
+    public ArticleMedia() {
+    }
 
     public ArticleMedia(Image image, @Nullable Image imageOverride, @Nullable Video video) {
         mImage = image;

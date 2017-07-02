@@ -9,7 +9,9 @@
 package com.chdryra.android.pagesuitenewsfeed;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,6 +29,8 @@ import com.chdryra.android.model.IndependentFetcher;
 import com.chdryra.android.model.JsonSubs;
 import com.chdryra.android.model.NewsFeed;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 
 /**
@@ -34,16 +38,17 @@ import java.util.ArrayList;
  * On: 23/01/2015
  * Email: rizwan.choudrey@gmail.com
  */
-public class FragmentArticlesView extends Fragment
+public class FragmentListView extends Fragment
         implements IndependentFetcher.FetcherCallback, RecyclerAdapter.OnItemClickListener<Article>{
-    private static final int LAYOUT = R.layout.fragment_list_articles;
+    public static final String ARTICLE = "com.chdryra.android.pagesuitenewsfeed.article";
+    private static final int LAYOUT = R.layout.fragment_list_view;
 
     private TextView mTitle;
     private RecyclerView mRecyclerView;
-    private RecyclerAdapter mAdapter;
+    private RecyclerAdapter<Article> mAdapter;
 
-    public static FragmentArticlesView newInstance() {
-        return new FragmentArticlesView();
+    public static FragmentListView newInstance() {
+        return new FragmentListView();
     }
 
     @Override
@@ -108,7 +113,10 @@ public class FragmentArticlesView extends Fragment
 
     @Override
     public void onItemClick(Article datum) {
-
+        Intent intent = new Intent(getActivity(), ActivityItemView.class);
+        Parcelable data = Parcels.wrap(datum);
+        intent.putExtra(ARTICLE, data);
+        startActivity(intent);
     }
 }
 

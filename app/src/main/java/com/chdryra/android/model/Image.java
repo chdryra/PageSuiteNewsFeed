@@ -2,6 +2,8 @@ package com.chdryra.android.model;
 
 import android.support.annotation.Nullable;
 
+import org.parceler.Parcel;
+
 import java.net.URL;
 
 /**
@@ -12,14 +14,18 @@ import java.net.URL;
  * Nullable Urls in case malformed from JSON.
  */
 
+@Parcel
 public class Image {
     @Nullable
-    private final URL mUrl;
+    private URL mUrl;
     @Nullable
-    private final URL mThumbnail;
-    private final String mCopyright;
-    private final String mCaption;
-    private final String mTitle;
+    private URL mThumbnail;
+    private String mCopyright;
+    private String mCaption;
+    private String mTitle;
+
+    public Image() {
+    }
 
     public Image(@Nullable URL url, @Nullable URL thumbnail, String copyright, String caption,
                  String title) {

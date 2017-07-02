@@ -1,23 +1,29 @@
 package com.chdryra.android.model;
 
+import org.parceler.Parcel;
+
 /**
  * Created by: Rizwan Choudrey
  * On: 01/07/2017
  * Email: rizwan.choudrey@gmail.com
  */
 
+@Parcel
 public class Article {
     private long mGuid;
 
-    private final ArticleSettings mSettings;
-    private final ArticleUrl mUrl;
-    private final ArticleSection mSection;
-    private final ArticleHeadlines mHeadline;
-    private final ArticleAuthors mAuthors;
-    private final ArticleDate mDate;
-    private final ArticleTopics mTopics;
-    private final ArticleMedia mMedia;
-    private final ArticleBody mBody;
+    private ArticleSettings mSettings;
+    private ArticleUrl mUrl;
+    private ArticleSection mSection;
+    private ArticleHeadlines mHeadline;
+    private ArticleAuthors mAuthors;
+    private ArticleDate mDate;
+    private ArticleTopics mTopics;
+    private ArticleMedia mMedia;
+    private ArticleBody mBody;
+
+    public Article() {
+    }
 
     public Article(long guid, ArticleSettings settings, ArticleUrl url, ArticleSection section,
                    ArticleHeadlines headline, ArticleAuthors authors, ArticleDate date,

@@ -1,5 +1,7 @@
 package com.chdryra.android.model;
 
+import org.parceler.Parcel;
+
 import java.net.URL;
 
 /**
@@ -8,10 +10,14 @@ import java.net.URL;
  * Email: rizwan.choudrey@gmail.com
  */
 
+@Parcel
 public class Video {
     private long mId;
-    private final URL mThumbnail;
-    private final String mTitle;
+    private URL mThumbnail;
+    private String mTitle;
+
+    public Video() {
+    }
 
     public Video(long id, URL thumbnail, String title) {
         mThumbnail = thumbnail;

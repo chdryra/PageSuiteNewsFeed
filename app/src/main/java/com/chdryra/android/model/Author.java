@@ -1,15 +1,21 @@
 package com.chdryra.android.model;
 
+import org.parceler.Parcel;
+
 /**
  * Created by: Rizwan Choudrey
  * On: 01/07/2017
  * Email: rizwan.choudrey@gmail.com
  */
 
+@Parcel
 public class Author {
-    private final String mName;
-    private final String mJobTitle;
-    private final String mTwitterHandle;
+    private String mName;
+    private String mJobTitle;
+    private String mTwitterHandle;
+
+    public Author() {
+    }
 
     public Author(String name, String jobTitle, String twitterHandle) {
         mName = name;
