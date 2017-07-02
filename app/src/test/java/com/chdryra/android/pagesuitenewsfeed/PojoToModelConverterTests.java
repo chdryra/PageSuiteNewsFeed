@@ -22,6 +22,7 @@ import com.chdryra.android.model.IndependentApi;
 import com.chdryra.android.model.JsonApi;
 import com.chdryra.android.model.NewsFeed;
 import com.chdryra.android.model.Video;
+import com.chdryra.android.utils.TextUtils;
 
 import org.junit.Test;
 
@@ -115,7 +116,7 @@ public class PojoToModelConverterTests {
     }
 
     private void testBody(ArticleBody body, ArticlePOJO articlePOJO) {
-        assertThat(body.getBody(), is(articlePOJO.getBody()));
+        assertThat(body.getBody(), is(TextUtils.removeScriptsAndClean(articlePOJO.getBody())));
     }
 
     private void testMedia(ArticleMedia media, ArticlePOJO articlePOJO) {
@@ -197,7 +198,7 @@ public class PojoToModelConverterTests {
 
     private void checkNullableString(String model, String pojo) {
         if(model.length() > 0) {
-            assertThat(model, is(pojo));
+            assertThat(model, is(TextUtils.clean(pojo)));
         } else {
             assertThat(pojo, isEmptyOrNullString());
         }

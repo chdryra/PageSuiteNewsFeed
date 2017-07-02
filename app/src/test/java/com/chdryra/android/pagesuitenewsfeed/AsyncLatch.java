@@ -11,7 +11,7 @@ import static org.junit.Assert.fail;
  * Email: rizwan.choudrey@gmail.com
  */
 class AsyncLatch {
-    private static final int WAIT_TIME = 500000000;
+    private static final int WAIT_TIME = 5000;
 
     private CountDownLatch mLatch;
     private long mAwaitTime;
