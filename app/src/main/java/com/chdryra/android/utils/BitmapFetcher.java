@@ -13,7 +13,6 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 
 /**
@@ -43,7 +42,7 @@ public class BitmapFetcher {
             URL url = params[0];
             Bitmap bitmap = null;
             try {
-                bitmap = BitmapFactory.decodeStream((InputStream)url.getContent());
+                bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
             } catch (IOException e) {
                 e.printStackTrace();
             }

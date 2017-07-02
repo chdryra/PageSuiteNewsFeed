@@ -25,15 +25,21 @@ public class IndependentApi extends JsonApi {
     }
 
     public enum Subscriptions {
-        FRONT_PAGE("11831/json"),
-        WORLD("11916/json"),
-        SPORT("12791/json"),
-        BUSINESS("11981/json");
+        FRONT_PAGE("Front Page", "11831/json"),
+        WORLD("World", "11916/json"),
+        SPORT("Sport", "12791/json"),
+        BUSINESS("Business", "11981/json");
 
+        private final String mName;
         private final String mPath;
 
-        Subscriptions(String path) {
+        Subscriptions(String name, String path) {
+            mName = name;
             mPath = path;
+        }
+
+        public String getName() {
+            return mName;
         }
 
         public String getPath() {

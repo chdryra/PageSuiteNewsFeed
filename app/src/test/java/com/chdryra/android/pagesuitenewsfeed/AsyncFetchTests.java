@@ -27,8 +27,8 @@ public class AsyncFetchTests {
 
     private JsonSubs<IndependentApi>.Subscription getSubscription(IndependentApi.Subscriptions sub) {
         JsonSubs<IndependentApi> subs = new JsonSubs<>(new IndependentApi());
-        subs.addSubscription(sub.name(), sub.getPath());
-        return subs.getSubscription(sub.name());
+        subs.addSubscription(sub.getName(), sub.getPath());
+        return subs.getSubscription(sub.getName());
     }
 
     @Test

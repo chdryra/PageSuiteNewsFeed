@@ -1,6 +1,5 @@
 package com.chdryra.android.pagesuitenewsfeed;
 
-import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,11 +7,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.chdryra.android.model.Article;
 import com.chdryra.android.model.ArticleHeadlines;
 import com.chdryra.android.model.Image;
-import com.chdryra.android.utils.BitmapFetcher;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -22,6 +23,8 @@ import java.util.List;
  */
 
 class ArticlesAdapter extends android.support.v7.widget.RecyclerView.Adapter {
+    private static final int ITEM_LAYOUT = R.layout.list_item_article;
+
     private final List<Article> mArticles;
 
     public ArticlesAdapter(List<Article> articles) {
@@ -36,8 +39,7 @@ class ArticlesAdapter extends android.support.v7.widget.RecyclerView.Adapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).
-                inflate(R.layout.list_item_article, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(ITEM_LAYOUT, parent, false);
 
         return new ItemViewHolder(v);
     }
@@ -53,36 +55,43 @@ class ArticlesAdapter extends android.support.v7.widget.RecyclerView.Adapter {
         return mArticles.size();
     }
 
-    private static class ItemViewHolder extends RecyclerView.ViewHolder implements BitmapFetcher.BitmapFetcherCallback{
+    private static class ItemViewHolder extends RecyclerView.ViewHolder {
         private TextView mHeadline;
         private TextView mAbstract;
         private ImageView mImage;
+        private TextView mSection;
+        private TextView mDate;
+        private TextView mAuthor;
 
         private ItemViewHolder(View v) {
             super(v);
             mHeadline = (TextView) v.findViewById(R.id.item_headline);
             mAbstract = (TextView) v.findViewById(R.id.item_abstract);
             mImage = (ImageView) v.findViewById(R.id.item_thumbnail);
+            mSection = (TextView) v.findViewById(R.id.item_section);
+            mDate = (TextView) v.findViewById(R.id.item_date);
+            mAuthor = (TextView) v.findViewById(R.id.item_author);
         }
 
         private void setData(Article article) {
             ArticleHeadlines headlines = article.getHeadlines();
             mHeadline.setText(headlines.getShortHeadline());
             mAbstract.setText(headlines.getSubHeadline());
+            mSection.setText(article.getSection().getSectionName());
+            DateFormat df = SimpleDateFormat.getDateInstance();
+            mDate.setText(df.format(article.getDate().getUpdatedDate()));
+            mAuthor.setText(article.getAuthors().getPrimaryAuthor().getName());
             setImage(article);
-
         }
 
         private void setImage(Article article) {
             Image image = article.getMedia().getImageOverride();
             if(image == null) image = article.getMedia().getImage();
-            BitmapFetcher fetcher = new BitmapFetcher(this);
-            fetcher.load(image.getThumbnail());
-        }
-
-        @Override
-        public void onBitmapFetched(Bitmap bitmap) {
-            mImage.setImageBitmap(bitmap);
+            Glide.with(mImage.getContext())
+                    .load(image.getThumbnail()) //need to look at updating this
+                    .fitCenter()
+                    .crossFade()
+                    .into(mImage);
         }
     }
 }

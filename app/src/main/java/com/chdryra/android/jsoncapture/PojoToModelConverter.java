@@ -54,12 +54,17 @@ public class PojoToModelConverter {
         return new Article(pojo.getGuid(),
                 newSettings(pojo),
                 newUrl(pojo),
+                newSection(pojo),
                 newHeadline(pojo),
                 newAuthors(pojo),
                 newDate(pojo),
                 newTopics(pojo),
                 newMedia(pojo),
                 newBody(pojo));
+    }
+
+    private ArticleSection newSection(ArticlePOJO pojo) {
+        return newSection(pojo.getSection(), asUrl(pojo.getSectionUrl()));
     }
 
     private ArticleTopics newTopics(ArticlePOJO pojo) {
@@ -155,6 +160,11 @@ public class PojoToModelConverter {
     }
 
     private String asString(@Nullable String nullableString) {
-        return nullableString == null ? "" : nullableString;
+        if(nullableString == null) return "";
+        return clean(nullableString);
+    }
+
+    private String clean(String pre) {
+        return pre.replace("&nbsp;", " ");
     }
 }

@@ -10,12 +10,14 @@ package com.chdryra.android.pagesuitenewsfeed;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chdryra.android.model.Article;
@@ -35,6 +37,7 @@ import java.util.ArrayList;
 public class FragmentArticlesView extends Fragment implements IndependentFetcher.FetcherCallback{
     private static final int LAYOUT = R.layout.fragment_list_articles;
 
+    private TextView mTitle;
     private RecyclerView mRecyclerView;
     private ArticlesAdapter mAdapter;
 
@@ -66,19 +69,30 @@ public class FragmentArticlesView extends Fragment implements IndependentFetcher
         super.onCreateView(inflater, container, savedInstanceState);
         View v = inflater.inflate(LAYOUT, container, false);
 
+        mTitle = (TextView) v.findViewById(R.id.title);
         mRecyclerView = (RecyclerView) v.findViewById(R.id.recycler_view_articles);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(manager);
 
         mAdapter = new ArticlesAdapter(new ArrayList<Article>());
         mRecyclerView.setAdapter(mAdapter);
 
-        JsonSubs<IndependentApi> subs = new JsonSubs<>(new IndependentApi());
+        DividerItemDecoration divider = new DividerItemDecoration(getActivity(),
+                manager.getOrientation());
+        mRecyclerView.addItemDecoration(divider);
+
         IndependentApi.Subscriptions frontPage = IndependentApi.Subscriptions.FRONT_PAGE;
-        subs.addSubscription(frontPage.name(), frontPage.getPath());
-        IndependentFetcher fetcher = new FactoryFeedFetcher().newIndependentFetcher();
-        fetcher.fetch(subs.getSubscription(frontPage.name()), this);
+        mTitle.setText(frontPage.getName());
+        fetchNewsFeed(frontPage);
 
         return v;
+    }
+
+    private void fetchNewsFeed(IndependentApi.Subscriptions sub) {
+        JsonSubs<IndependentApi> subs = new JsonSubs<>(new IndependentApi());
+        subs.addSubscription(sub.getName(), sub.getPath());
+        IndependentFetcher fetcher = new FactoryFeedFetcher().newIndependentFetcher();
+        fetcher.fetch(subs.getSubscription(sub.getName()), this);
     }
 
 
