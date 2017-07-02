@@ -10,15 +10,16 @@ import com.chdryra.android.model.Article;
 import com.chdryra.android.model.ArticleAuthors;
 import com.chdryra.android.model.ArticleBody;
 import com.chdryra.android.model.ArticleDate;
-import com.chdryra.android.model.ArticleHeadline;
+import com.chdryra.android.model.ArticleHeadlines;
 import com.chdryra.android.model.ArticleMedia;
 import com.chdryra.android.model.ArticleSettings;
 import com.chdryra.android.model.ArticleTopics;
 import com.chdryra.android.model.ArticleUrl;
 import com.chdryra.android.model.Author;
+import com.chdryra.android.model.FactoryJsonClient;
 import com.chdryra.android.model.Image;
 import com.chdryra.android.model.IndependentApi;
-import com.chdryra.android.model.IndependentJsonFetcher;
+import com.chdryra.android.model.JsonApi;
 import com.chdryra.android.model.NewsFeed;
 import com.chdryra.android.model.Video;
 
@@ -28,9 +29,15 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 import static junit.framework.Assert.fail;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
@@ -43,27 +50,41 @@ import static org.hamcrest.Matchers.nullValue;
 public class PojoToModelConverterTests {
     @Test
     public void convert_pojo_to_model_works() {
-        IndependentJsonFetcher fetcher = new IndependentJsonFetcher(new IndependentApi());
-
         final AsyncLatch latch = new AsyncLatch();
+        IndependentApi api = new IndependentApi();
+        IndependentApi.Service service = newService(newClient(api));
+        IndependentApi.Subscriptions frontPage = IndependentApi.Subscriptions.FRONT_PAGE;
+        Call<NewsFeedPOJO> response = service.getQueryResponse(frontPage.getPath());
 
-        fetcher.fetch(IndependentApi.Feed.FRONT_PAGE, new IndependentJsonFetcher.FetcherCallback() {
+        response.enqueue(new Callback<NewsFeedPOJO>() {
             @Override
-            public void onFetched(NewsFeedPOJO response) {
-                testResponse(latch, response);
+            public void onResponse(Call<NewsFeedPOJO> call, Response<NewsFeedPOJO> response) {
+                NewsFeedPOJO body = response.body();
+                assertThat(body, is(notNullValue()));
+                testResponse(latch, body);
             }
 
             @Override
-            public void onFailed(String message) {
-                fail(message);
+            public void onFailure(Call<NewsFeedPOJO> call, Throwable t) {
+                fail(t.getMessage());
                 latch.trigger();
             }
         });
+        
 
         latch.waitForTrigger();
         assertThat(latch.wasTriggered(), is(true));
     }
 
+    private IndependentApi.Service newService(Retrofit client) {
+        return client.create(IndependentApi.Service.class);
+    }
+
+    private Retrofit newClient(JsonApi api) {
+        FactoryJsonClient clientFactory = new FactoryJsonClient();
+        return clientFactory.newClient(api.getBaseUrl());
+    }
+    
     private void testResponse(AsyncLatch latch, NewsFeedPOJO response) {
         PojoToModelConverter converter = new PojoToModelConverter();
         NewsFeed model = converter.convert(response);
@@ -85,7 +106,7 @@ public class PojoToModelConverterTests {
         assertThat(article.getGuid(), is(articlePOJO.getGuid()));
         testSettings(article.getSettings(), articlePOJO);
         testUrl(article.getUrl(), articlePOJO);
-        testHeadline(article.getHeadline(), articlePOJO);
+        testHeadline(article.getHeadlines(), articlePOJO);
         testAuthors(article.getAuthors(), articlePOJO);
         testDate(article.getDate(), articlePOJO);
         testTopics(article.getTopics(), articlePOJO);
@@ -166,7 +187,7 @@ public class PojoToModelConverterTests {
         checkNullableString(authors.getAuthorLocation(), articlePOJO.getAuthorLocation());
     }
 
-    private void testHeadline(ArticleHeadline headline, ArticlePOJO articlePOJO) {
+    private void testHeadline(ArticleHeadlines headline, ArticlePOJO articlePOJO) {
         assertThat(headline.getHeadline(), is(articlePOJO.getHeadline()));
         assertThat(headline.getShortHeadline(), is(articlePOJO.getShortHeadline()));
         checkNullableString(headline.getSubHeadline(), articlePOJO.getSubHeadline());
@@ -178,7 +199,7 @@ public class PojoToModelConverterTests {
         if(model.length() > 0) {
             assertThat(model, is(pojo));
         } else {
-            assertThat(pojo, is(nullValue()));
+            assertThat(pojo, isEmptyOrNullString());
         }
     }
 

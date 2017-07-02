@@ -10,6 +10,6 @@ import com.chdryra.android.jsoncapture.PojoToModelConverter;
 
 public class FactoryFeedFetcher {
     public IndependentFetcher newIndependentFetcher() {
-        return new IndependentFetcher(new IndependentApi(), new RetrofitFetcher(), new PojoToModelConverter());
+        return new IndependentFetcher(new RetrofitFetcher(), new PojoToModelConverter());
     }
 }

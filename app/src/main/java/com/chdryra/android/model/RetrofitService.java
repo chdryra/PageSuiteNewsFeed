@@ -10,22 +10,22 @@ import retrofit2.Call;
 
 public class RetrofitService<Service, Response> {
     private Class<Service> mServiceClass;
-    private ServiceCall<Service, Response> mCallExecuter;
+    private ServiceCall<Service, Response> mCall;
 
     public interface ServiceCall<Service, Response> {
-        Call<Response> executeCall(Service service, String path);
+        Call<Response> execute(Service service, String path);
     }
 
-    public RetrofitService(Class<Service> serviceClass, ServiceCall<Service, Response> callExecuter) {
+    public RetrofitService(Class<Service> serviceClass, ServiceCall<Service, Response> call) {
         mServiceClass = serviceClass;
-        mCallExecuter = callExecuter;
+        mCall = call;
     }
 
     public Class<Service> getServiceClass() {
         return mServiceClass;
     }
 
-    public ServiceCall<Service, Response> getCallExecuter() {
-        return mCallExecuter;
+    public ServiceCall<Service, Response> getCall() {
+        return mCall;
     }
 }

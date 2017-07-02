@@ -14,7 +14,6 @@ import retrofit2.Call;
  */
 
 public class IndependentFetcher {
-    private final IndependentApi mApi;
     private final RetrofitFetcher mFetcher;
     private final PojoToModelConverter mConverter;
 
@@ -24,20 +23,18 @@ public class IndependentFetcher {
         void onFailed(String message);
     }
 
-    public IndependentFetcher(IndependentApi api,
-                              RetrofitFetcher fetcher,
+    public IndependentFetcher(RetrofitFetcher fetcher,
                               PojoToModelConverter converter) {
-        mApi = api;
         mFetcher = fetcher;
         mConverter = converter;
     }
 
-    public void fetch(IndependentApi.Feed feed,
+    public void fetch(JsonSubs<IndependentApi>.Subscription sub,
                       final FetcherCallback callback) {
         RetrofitService<IndependentApi.Service, NewsFeedPOJO> service
                 = new RetrofitService<>(IndependentApi.Service.class, getServiceCall());
 
-        mFetcher.fetch(mApi, feed.name(), service, new RetrofitFetcher.FetcherCallback<NewsFeedPOJO>() {
+        mFetcher.fetch(sub, service, new RetrofitFetcher.FetcherCallback<NewsFeedPOJO>() {
             @Override
             public void onFetched(NewsFeedPOJO newsFeedPOJO) {
                 callback.onFetched(mConverter.convert(newsFeedPOJO));
@@ -54,7 +51,7 @@ public class IndependentFetcher {
     private RetrofitService.ServiceCall<IndependentApi.Service, NewsFeedPOJO> getServiceCall() {
         return new RetrofitService.ServiceCall<IndependentApi.Service, NewsFeedPOJO>() {
             @Override
-            public Call<NewsFeedPOJO> executeCall(IndependentApi.Service service, String path) {
+            public Call<NewsFeedPOJO> execute(IndependentApi.Service service, String path) {
                 return service.getQueryResponse(path);
             }
         };

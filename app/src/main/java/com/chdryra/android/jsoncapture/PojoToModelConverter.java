@@ -6,7 +6,7 @@ import com.chdryra.android.model.Article;
 import com.chdryra.android.model.ArticleAuthors;
 import com.chdryra.android.model.ArticleBody;
 import com.chdryra.android.model.ArticleDate;
-import com.chdryra.android.model.ArticleHeadline;
+import com.chdryra.android.model.ArticleHeadlines;
 import com.chdryra.android.model.ArticleMedia;
 import com.chdryra.android.model.ArticleSection;
 import com.chdryra.android.model.ArticleSettings;
@@ -116,8 +116,8 @@ public class PojoToModelConverter {
         return new Author(asString(pojo.getName()), asString(pojo.getJobTitle()), asString(pojo.getTwitterHandle()));
     }
 
-    private ArticleHeadline newHeadline(ArticlePOJO pojo) {
-        return new ArticleHeadline(asString(pojo.getHeadline()),
+    private ArticleHeadlines newHeadline(ArticlePOJO pojo) {
+        return new ArticleHeadlines(asString(pojo.getHeadline()),
                 asString(pojo.getHeadlineOverride()),
                 asString(pojo.getShortHeadline()),
                 asString(pojo.getSubHeadline()),

@@ -15,36 +15,29 @@ import retrofit2.http.Path;
 public class IndependentApi extends JsonApi {
     private static final String BASE_URL = "http://www.independent.co.uk/api/v1/";
 
-    public enum Feed {
-        FRONT_PAGE("11831"),
-        WORLD("11916"),
-        SPORT("12791"),
-        BUSINESS("11981");
-
-        private final String mFeedCode;
-
-        Feed(String feedCode) {
-            mFeedCode = feedCode;
-        }
-
-        public String getFeedCode() {
-            return mFeedCode;
-        }
-    }
-
     public IndependentApi() {
         super(BASE_URL);
-        for(Feed feed : Feed.values()) {
-            addServicePath(feed.name(), feed.getFeedCode());
-        }
-    }
-
-    public ServicePath getServicePath(Feed feed) {
-        return getServicePath(feed.name());
     }
 
     public interface Service {
-        @GET("{servicePath}/json")
-        Call<NewsFeedPOJO> getQueryResponse(@Path("servicePath") String code);
+        @GET("{path}")
+        Call<NewsFeedPOJO> getQueryResponse(@Path(value = "path", encoded = true) String code);
+    }
+
+    public enum Subscriptions {
+        FRONT_PAGE("11831/json"),
+        WORLD("11916/json"),
+        SPORT("12791/json"),
+        BUSINESS("11981/json");
+
+        private final String mPath;
+
+        Subscriptions(String path) {
+            mPath = path;
+        }
+
+        public String getPath() {
+            return mPath;
+        }
     }
 }

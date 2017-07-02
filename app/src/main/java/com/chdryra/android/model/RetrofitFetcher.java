@@ -18,13 +18,12 @@ public class RetrofitFetcher {
         void onFailed(String message);
     }
 
-    public <Service, ReturnType> void fetch(JsonApi api,
-                                            String pathName,
-                                            RetrofitService<Service, ReturnType> service,
-                                            final FetcherCallback<ReturnType> callback) {
-        Service fetcherService = newService(newClient(api), service);
-        JsonApi.ServicePath servicePath = api.getServicePath(pathName);
-        Call<ReturnType> response = service.getCallExecuter().executeCall(fetcherService, servicePath.getPath());
+    public <Api extends JsonApi, Service, ReturnType>
+    void fetch(JsonSubs<Api>.Subscription sub,
+               RetrofitService<Service, ReturnType> service,
+               final FetcherCallback<ReturnType> callback) {
+        Service fetcherService = newService(newClient(sub.getApi()), service);
+        Call<ReturnType> response = service.getCall().execute(fetcherService, sub.getPath());
 
         response.enqueue(new Callback<ReturnType>() {
             @Override

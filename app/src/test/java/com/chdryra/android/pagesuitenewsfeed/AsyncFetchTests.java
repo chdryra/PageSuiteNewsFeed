@@ -1,11 +1,9 @@
 package com.chdryra.android.pagesuitenewsfeed;
 
-import android.support.annotation.NonNull;
-
 import com.chdryra.android.jsoncapture.NewsFeedPOJO;
 import com.chdryra.android.model.FactoryJsonClient;
 import com.chdryra.android.model.IndependentApi;
-import com.chdryra.android.model.JsonApi;
+import com.chdryra.android.model.JsonSubs;
 
 import org.junit.Test;
 
@@ -20,37 +18,44 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 /**
- * For the async network calls to the Independent Api.
+ * For the async network calls to the Independent Api. Sometimes they fail first time
+ * depending on connection quality.
  *
  */
-public class AsyncUnitTests {
-    private static final int WAIT_TIME = 1000;
+public class AsyncFetchTests {
+    private static final int WAIT_TIME = 2000;
+
+    private JsonSubs<IndependentApi>.Subscription getSubscription(IndependentApi.Subscriptions sub) {
+        JsonSubs<IndependentApi> subs = new JsonSubs<>(new IndependentApi());
+        subs.addSubscription(sub.name(), sub.getPath());
+        return subs.getSubscription(sub.name());
+    }
 
     @Test
     public void test_frontpage_response_is_notnull() throws Exception {
-        test_api_feed_response_is_notnull(IndependentApi.Feed.FRONT_PAGE);
+        test_api_feed_response_is_notnull(IndependentApi.Subscriptions.FRONT_PAGE);
     }
 
     @Test
     public void test_world_response_is_notnull() throws Exception {
-        test_api_feed_response_is_notnull(IndependentApi.Feed.WORLD);
+        test_api_feed_response_is_notnull(IndependentApi.Subscriptions.WORLD);
     }
 
     @Test
     public void test_business_response_is_notnull() throws Exception {
-        test_api_feed_response_is_notnull(IndependentApi.Feed.BUSINESS);
+        test_api_feed_response_is_notnull(IndependentApi.Subscriptions.BUSINESS);
     }
 
     @Test
     public void test_sport_response_is_notnull() throws Exception {
-        test_api_feed_response_is_notnull(IndependentApi.Feed.SPORT);
+        test_api_feed_response_is_notnull(IndependentApi.Subscriptions.SPORT);
     }
 
-    private void test_api_feed_response_is_notnull(IndependentApi.Feed feed) {
-        IndependentApi api = newApi();
+    private void test_api_feed_response_is_notnull(IndependentApi.Subscriptions subscription) {
+        JsonSubs<IndependentApi>.Subscription sub = getSubscription(subscription);
+        IndependentApi api = sub.getApi();
         IndependentApi.Service service = newService(newClient(api));
-        JsonApi.ServicePath servicePath = api.getServicePath(feed);
-        Call<NewsFeedPOJO> response = service.getQueryResponse(servicePath.getPath());
+        Call<NewsFeedPOJO> response = service.getQueryResponse(sub.getPath());
 
         final AsyncLatch latch = newAsyncLatch();
 
@@ -74,11 +79,6 @@ public class AsyncUnitTests {
     private void waitForTrigger(AsyncLatch latch) {
         latch.waitForTrigger();
         assertThat(latch.wasTriggered(), is(true));
-    }
-
-    @NonNull
-    private IndependentApi newApi() {
-        return new IndependentApi();
     }
 
     private IndependentApi.Service newService(Retrofit client) {
