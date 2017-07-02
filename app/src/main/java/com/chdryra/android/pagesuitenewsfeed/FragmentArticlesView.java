@@ -39,7 +39,7 @@ public class FragmentArticlesView extends Fragment implements IndependentFetcher
 
     private TextView mTitle;
     private RecyclerView mRecyclerView;
-    private ArticlesAdapter mAdapter;
+    private RecyclerAdapter mAdapter;
 
     public static FragmentArticlesView newInstance() {
         return new FragmentArticlesView();
@@ -55,7 +55,7 @@ public class FragmentArticlesView extends Fragment implements IndependentFetcher
 
     @Override
     public void onFetched(NewsFeed response) {
-        mAdapter.setArticles(response.getArticles());
+        mAdapter.setData(response.getArticles());
     }
 
     @Override
@@ -74,7 +74,7 @@ public class FragmentArticlesView extends Fragment implements IndependentFetcher
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(manager);
 
-        mAdapter = new ArticlesAdapter(new ArrayList<Article>());
+        mAdapter = new RecyclerAdapter<>(new FactoryArticleViewHolder(), new ArrayList<Article>());
         mRecyclerView.setAdapter(mAdapter);
 
         DividerItemDecoration divider = new DividerItemDecoration(getActivity(),
