@@ -125,6 +125,7 @@ public class ArticlePOJO {
         return mLink;
     }
 
+    @Nullable
     public List<AuthorPOJO> getAuthors() {
         return mAuthors;
     }

@@ -36,6 +36,8 @@ public class PojoToModelConverter {
     public NewsFeed convert(NewsFeedPOJO pojo) {
         List<Article> articles = new ArrayList<>();
         for(ArticlePOJO articlePojo : pojo.getArticles()) {
+            //Assume null article if no publish date
+            if(articlePojo.getPublishDate() == null) continue;
             articles.add(convert(articlePojo));
         }
         FeedsPOJO feeds = pojo.getFeeds();
